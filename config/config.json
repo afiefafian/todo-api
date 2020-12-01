@@ -1,0 +1,12 @@
+{
+    "debug": true,
+    "env": "dev",
+    "port": "9000",
+    "database": {
+        "host": "",
+        "port": "",
+        "user": "postgres",
+        "pass": "",
+        "name": "todo_app"
+    }
+}
