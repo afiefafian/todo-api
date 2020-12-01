@@ -10,24 +10,26 @@ import (
 
 // UserHandler handling user services
 type UserHandler struct {
+	Router       *httpRouter
 	UserServices entity.UserServices
 }
 
-func userHTTPRouter(r *httprouter.Router, u entity.UserServices) {
+func userHTTPRouter(r *httpRouter, u entity.UserServices) {
 	handler := &UserHandler{
+		Router:       r,
 		UserServices: u,
 	}
 
-	r.GET("/users", handler.FetchUsers)
-	r.GET("/users/:id", handler.GetUserByID)
-	r.POST("/users", handler.Store)
-	r.PUT("/users/:id", handler.Update)
-	r.DELETE("/users/:id", handler.Delete)
+	r.Router.GET("/users", handler.FetchUsers)
+	r.Router.GET("/users/:id", handler.GetUserByID)
+	r.Router.POST("/users", handler.Store)
+	r.Router.PUT("/users/:id", handler.Update)
+	r.Router.DELETE("/users/:id", handler.Delete)
 }
 
 // FetchUsers http routing handler for get user
-func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
+func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	response := resultSuccess
 
 	ctx := r.Context()
 	data, err := u.UserServices.Fetch(ctx)
@@ -36,25 +38,14 @@ func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	// Marshal data to []byte
-	result, err := json.Marshal(data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Write result to http.ResponseWrite
-	w.Write(result)
+	response.Data = data
+	JSONResult(w, response)
 	return
 }
 
 // GetUserByID : http routing handler for get user
 func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	response := resultFormat{
-		Status:  http.StatusOK,
-		Name:    http.StatusText(http.StatusOK),
-		Message: http.StatusText(http.StatusOK),
-	}
+	response := resultSuccess
 
 	ctx := r.Context()
 	userID := ps.ByName("id")
@@ -65,25 +56,14 @@ func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps htt
 	}
 
 	response.Data = data
-
-	// Marshal data to []byte
-	result, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	JSONResult(w, result, http.StatusOK)
+	JSONResult(w, &response)
 	return
 }
 
 // Store will store the article by given request body
 func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	response := resultFormat{
-		Status:  http.StatusCreated,
-		Name:    http.StatusText(http.StatusOK),
-		Message: "Success create an user",
-	}
+	response := resultSuccess
+	response.Message = "Success create an user"
 
 	var user entity.User
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -102,24 +82,14 @@ func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	// Marshal
-	result, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	JSONResult(w, result, http.StatusCreated)
+	JSONResult(w, &response)
 	return
 }
 
 // Update will update user data by given request body
 func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	response := resultFormat{
-		Status:  http.StatusOK,
-		Name:    http.StatusText(http.StatusOK),
-		Message: "Success update an user",
-	}
+	response := resultSuccess
+	response.Message = "Success update an user"
 
 	var user entity.User
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -139,24 +109,14 @@ func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// Marshal result
-	result, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	JSONResult(w, result, http.StatusCreated)
+	JSONResult(w, &response)
 	return
 }
 
 // Delete will delete the user by id
 func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	response := resultFormat{
-		Status:  http.StatusOK,
-		Name:    http.StatusText(http.StatusOK),
-		Message: "Success delete an user",
-	}
+	response := resultSuccess
+	response.Message = "Success delete an user"
 
 	// Delete user
 	ctx := r.Context()
@@ -166,13 +126,6 @@ func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// Marshal result
-	result, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	JSONResult(w, result, http.StatusOK)
+	JSONResult(w, &response)
 	return
 }

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"encoding/json"
 	"net/http"
 	"todo_api/src/entity"
 
@@ -10,38 +9,34 @@ import (
 
 // UserHandler handling user services
 type UserRegisterHandler struct {
+	Router       *httpRouter
 	UserServices entity.UserServices
 }
 
-func userRegisterHTTPRouter(r *httprouter.Router, u entity.UserServices) {
+func userRegisterHTTPRouter(r *httpRouter, u entity.UserServices) {
 	handler := &UserRegisterHandler{
+		Router:       r,
 		UserServices: u,
 	}
 
-	r.POST("/users/register", handler.RegisterUser
-	//r.POST("/users/register/resend-code", handler.RegisterUser)
-	//r.POST("/users/register/verify", handler.RegisterUser)
+	r.Router.POST("/users/register", handler.RegisterUser)
+	//r.Router.POST("/users/register/resend-code", handler.RegisterUser)
+	//r.Router.POST("/users/register/verify", handler.RegisterUser)
 }
 
-// RegisterUser
+// RegisterUser by user data
 func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
+	response := resultSuccess
+	response.Name = "Success send registration code"
 
-	ctx := r.Context()
-	data, err := u.UserServices.Fetch(ctx)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// Delete user
+	//ctx := r.Context()
+	//userID := ps.ByName("id")
+	//if err := u.UserServices.Delete(ctx, userID); err != nil {
+	//	http.Error(w, err.Error(), http.StatusInternalServerError)
+	//	return
+	//}
 
-	// Marshal data to []byte
-	result, err := json.Marshal(data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Write result to http.ResponseWrite
-	w.Write(result)
+	JSONResult(w, &response)
 	return
 }

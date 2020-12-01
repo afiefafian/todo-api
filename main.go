@@ -8,7 +8,6 @@ import (
 	httpDelivery "todo_api/src/delivery/http"
 
 	"github.com/go-pg/pg/v10"
-	"github.com/julienschmidt/httprouter"
 	"github.com/spf13/viper"
 )
 
@@ -27,13 +26,10 @@ func main() {
 	}()
 
 	// Init router
-	router := httprouter.New()
+	r := httpDelivery.NewRouter(db)
 
-	// Set http routing
-	httpDelivery.InitRoute(router, db)
-
-	fmt.Println("Served and listen at", viper.GetString(`port`))
-	log.Fatal(http.ListenAndServe(":"+viper.GetString("port"), router))
+	fmt.Println("Listening on :", viper.GetString(`port`))
+	log.Fatal(http.ListenAndServe(":"+viper.GetString("port"), &r.Router))
 }
 
 func config() {
