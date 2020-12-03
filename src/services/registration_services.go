@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"errors"
+	"strings"
 	"todo_api/src/entity"
 )
 
@@ -18,24 +20,19 @@ func NewRegistrationServices(u entity.UserRepository, r entity.RegistrationRepos
 	}
 }
 
-func (u *registrationServices) Register(ctx context.Context, registration *entity.Registration) error {
-	//panic("implement me")
-	//if err := u.registrationRepo.Store(c, user); err != nil {
-	//	return err
-	//}
+// Register and send register otp to user email
+func (r *registrationServices) Register(ctx context.Context, registration *entity.Registration) error {
+	// Check email in db
+	email := strings.Trim(registration.Email, "")
+	user, err := r.userRepo.GetByEmail(ctx, email)
+	if err != nil && err.Error() != "pg: no rows in result set" {
+		return err
+	}
+
+	if user != (entity.User{}) {
+		return errors.New("Email already used")
+	}
+	//if user
+	// If found then return error
 	return nil
 }
-
-//func (u *userServices) Update(c context.Context, user *entity.User, id string) error {
-//	if err := u.userRepo.Update(c, user, id); err != nil {
-//		return err
-//	}
-//	return nil
-//}
-//
-//func (u *userServices) Delete(c context.Context, id string) error {
-//	if err := u.userRepo.Delete(c, id); err != nil {
-//		return err
-//	}
-//	return nil
-//}

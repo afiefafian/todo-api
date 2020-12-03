@@ -39,6 +39,6 @@ func setRoute(r *httpRouter, db *pg.DB) {
 	us := services.NewUserServices(userRepo)
 
 	// Set Route
-	userRegisterHTTPRouter(r, RegisterServicesDependencies{us, rs})
 	userHTTPRouter(r, us)
+	userRegisterHTTPRouter(r, rs)
 }

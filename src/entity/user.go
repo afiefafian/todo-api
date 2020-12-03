@@ -34,4 +34,5 @@ type UserRepository interface {
 	Update(ctx context.Context, u *User, id string) error
 	Store(ctx context.Context, u *User) error
 	Delete(ctx context.Context, id string) error
+	GetByEmail(ctx context.Context, email string) (User, error)
 }

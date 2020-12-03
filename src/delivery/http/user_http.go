@@ -22,10 +22,10 @@ func userHTTPRouter(r *httpRouter, u entity.UserServices) {
 	}
 
 	r.Router.GET("/users", handler.FetchUsers)
-	//r.Router.GET("/users/:id", handler.GetUserByID)
-	//r.Router.POST("/users", handler.Store)
-	//r.Router.PUT("/users/:id", handler.Update)
-	//r.Router.DELETE("/users/:id", handler.Delete)
+	r.Router.GET("/users/:id", handler.GetUserByID)
+	r.Router.POST("/users", handler.Store)
+	r.Router.PUT("/users/:id", handler.Update)
+	r.Router.DELETE("/users/:id", handler.Delete)
 }
 
 // FetchUsers http routing handler for get user
@@ -62,7 +62,7 @@ func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps htt
 }
 
 // Store will store the article by given request body
-func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	res := response.ResultSuccess
 	res.Message = "Success create an user"
 

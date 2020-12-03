@@ -11,19 +11,14 @@ import (
 
 // UserHandler handling user services
 type UserRegisterHandler struct {
-	Router *httpRouter
-	D      RegisterServicesDependencies
-}
-
-type RegisterServicesDependencies struct {
-	UserServices         entity.UserServices
+	Router               *httpRouter
 	RegistrationServices entity.RegistrationServices
 }
 
-func userRegisterHTTPRouter(r *httpRouter, d RegisterServicesDependencies) {
+func userRegisterHTTPRouter(r *httpRouter, rs entity.RegistrationServices) {
 	handler := &UserRegisterHandler{
-		Router: r,
-		D:      d,
+		Router:               r,
+		RegistrationServices: rs,
 	}
 
 	r.Router.POST("/users/register", handler.RegisterUser)
@@ -44,13 +39,12 @@ func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// Delete user
-	//ctx := r.Context()
-	//userID := ps.ByName("id")
-	//if err := u.UserServices.Delete(ctx, userID); err != nil {
-	//	http.Error(w, err.Error(), http.StatusInternalServerError)
-	//	return
-	//}
+	// Send register otp to user email
+	ctx := r.Context()
+	if err := u.RegistrationServices.Register(ctx, &user); err != nil {
+		response.JSONError(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	response.JSONResult(w, &res)
 	return
