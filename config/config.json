@@ -1,6 +1,6 @@
 {
     "debug": true,
-    "env": "dev",
+    "env": "development",
     "port": "9000",
     "database": {
         "host": "",

@@ -1,8 +1,10 @@
-package http
+package helper
 
-import "gopkg.in/go-playground/validator.v9"
+import (
+	"gopkg.in/go-playground/validator.v9"
+)
 
-func validateRequest(m interface{}) (bool, error) {
+func ValidateStruct(m interface{}) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {

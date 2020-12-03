@@ -1,7 +1,9 @@
 package http
 
 import (
+	"encoding/json"
 	"net/http"
+	"todo_api/src/delivery/http/response"
 	"todo_api/src/entity"
 
 	"github.com/julienschmidt/httprouter"
@@ -9,14 +11,19 @@ import (
 
 // UserHandler handling user services
 type UserRegisterHandler struct {
-	Router       *httpRouter
-	UserServices entity.UserServices
+	Router *httpRouter
+	D      RegisterServicesDependencies
 }
 
-func userRegisterHTTPRouter(r *httpRouter, u entity.UserServices) {
+type RegisterServicesDependencies struct {
+	UserServices         entity.UserServices
+	RegistrationServices entity.RegistrationServices
+}
+
+func userRegisterHTTPRouter(r *httpRouter, d RegisterServicesDependencies) {
 	handler := &UserRegisterHandler{
-		Router:       r,
-		UserServices: u,
+		Router: r,
+		D:      d,
 	}
 
 	r.Router.POST("/users/register", handler.RegisterUser)
@@ -24,10 +31,18 @@ func userRegisterHTTPRouter(r *httpRouter, u entity.UserServices) {
 	//r.Router.POST("/users/register/verify", handler.RegisterUser)
 }
 
-// RegisterUser by user data
-func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	response := resultSuccess
-	response.Name = "Success send registration code"
+// RegisterUser register user and send confirmation code
+func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	res := response.ResultSuccess
+	res.Message = "Success send registration code"
+
+	var user entity.Registration
+	json.NewDecoder(r.Body).Decode(&user)
+
+	// Validation
+	if ok := response.ValidateAndReturnErrResultHTTPWithErrField(w, &user); !ok {
+		return
+	}
 
 	// Delete user
 	//ctx := r.Context()
@@ -37,6 +52,6 @@ func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Reques
 	//	return
 	//}
 
-	JSONResult(w, &response)
+	response.JSONResult(w, &res)
 	return
 }

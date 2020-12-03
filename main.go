@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -28,7 +27,8 @@ func main() {
 	// Init router
 	r := httpDelivery.NewRouter(db)
 
-	fmt.Println("Listening on :", viper.GetString(`port`))
+	log.Println("SKYSHI @2020 ----")
+	log.Printf("Listening on : %v", viper.GetString(`port`))
 	log.Fatal(http.ListenAndServe(":"+viper.GetString("port"), &r.Router))
 }
 
@@ -37,10 +37,6 @@ func config() {
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
-	}
-
-	if viper.GetBool("debug") {
-		log.Println("Service RUN on DEBUG mode")
 	}
 }
 
