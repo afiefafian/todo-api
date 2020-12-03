@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a5c787d-d4a2-4bcd-95f0-5e6b58c5ac7d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +90,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add response handler" />
     <MESSAGE value="Add response handler and reformat http handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add response handler and reformat http handler" />
+    <MESSAGE value="Add gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add gitignore" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -108,10 +109,10 @@
       <screen x="-223" y="-1080" width="1920" height="1080" />
     </state>
     <state x="201" y="-881" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1606728086372" />
-    <state x="313" y="22" key="CommitChangelistDialog2" timestamp="1606965786590">
+    <state x="313" y="22" key="CommitChangelistDialog2" timestamp="1606967014994">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="313" y="22" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1606965786590" />
+    <state x="313" y="22" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1606967014994" />
     <state x="232" y="-831" key="EditFileWatcherDialog" timestamp="1606727989064">
       <screen x="-223" y="-1080" width="1920" height="1080" />
     </state>
@@ -185,10 +186,10 @@
     </state>
     <state x="82" y="-977" key="SettingsEditor/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1606728014164" />
     <state x="229" y="86" key="SettingsEditor/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1606726984608" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1606965798908">
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1606967021863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1606965798908" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1606967021863" />
     <state x="501" y="288" key="com.goide.refactor.extractInterface.GoExtractInterfaceDialog" timestamp="1606880880231">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
