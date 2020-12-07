@@ -20,7 +20,7 @@ func JSONResult(w http.ResponseWriter, resultPtr interface{}) {
 	return
 }
 
-// Parsing result data to byte and return status code
+// parseToByte parsing result data to slice byte json
 func parseToByte(resultPtr interface{}) (*[]byte, int) {
 	result, err := json.Marshal(resultPtr)
 	if err != nil {
@@ -41,7 +41,7 @@ func parseToByte(resultPtr interface{}) (*[]byte, int) {
 	return &result, code
 }
 
-// setStatusCodeFromResult set status code from result data
+// getStatusCodeFromResult get status code from result data
 func getStatusCodeFromResult(resultPtr interface{}) int {
 	resultReflect := reflect.ValueOf(resultPtr)
 	// Get reflect data from pointer

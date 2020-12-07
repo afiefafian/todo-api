@@ -22,10 +22,16 @@ func (p *pgsqlUserRepository) Fetch(context.Context) (res []entity.User, err err
 	return res, nil
 }
 
-func (p *pgsqlUserRepository) GetByID(_ context.Context, id string) (res entity.User, err error) {
-	res = entity.User{}
-	err = p.DB.Model(&res).Where("id = ?", id).First()
-	return
+func (p *pgsqlUserRepository) GetByID(_ context.Context, id string) (entity.User, error) {
+	user := entity.User{}
+	err := p.DB.Model(&user).Where("id = ?", id).First()
+	return user, queryErrHandling(err)
+}
+
+func (p *pgsqlUserRepository) GetByEmail(_ context.Context, email string) (entity.User, error) {
+	user := entity.User{}
+	err := p.DB.Model(&user).Where("email = ?", email).First()
+	return user, queryErrHandling(err)
 }
 
 func (p *pgsqlUserRepository) Store(_ context.Context, user *entity.User) error {
@@ -53,10 +59,4 @@ func (p *pgsqlUserRepository) Delete(_ context.Context, id string) error {
 		return err
 	}
 	return nil
-}
-
-func (p *pgsqlUserRepository) GetByEmail(_ context.Context, email string) (res entity.User, err error) {
-	res = entity.User{}
-	err = p.DB.Model(&res).Where("email = ?", email).First()
-	return
 }

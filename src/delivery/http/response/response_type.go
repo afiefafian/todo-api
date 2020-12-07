@@ -4,29 +4,31 @@ import "net/http"
 
 type Response map[string]interface{}
 
+// ResultFormat struct definition
 type ResultFormat struct {
 	Status  int         `json:"status"`
 	Name    string      `json:"name"`
 	Message interface{} `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
-	Error   interface{} `json:"error,omitempty"`
-	Meta    Response    `json:"meta,omitempty"`
+	Errors  interface{} `json:"errors,omitempty"`
+	Meta    interface{} `json:"meta,omitempty"`
+	Trace   interface{} `json:"trace,omitempty"`
 }
 
 type paginateMeta struct {
 }
 
-// resultSuccess is a sample of result success
-// Beware edit the result
-// Please create new variable based on sample below
-// res := resultSuccess
+// ResultSuccess is a sample of result success.
+// Beware! Don't change the variable directly.
+// Please create new variable based on sample below.
+// example: res := resultSuccess
 var ResultSuccess = ResultFormat{
 	Status:  http.StatusOK,
 	Name:    http.StatusText(http.StatusOK),
 	Message: http.StatusText(http.StatusOK),
 }
 
-// resultErr is a sample of result success
+// ResultErr is a sample of success result
 var ResultErr = ResultFormat{
 	Status:  http.StatusBadRequest,
 	Name:    http.StatusText(http.StatusBadRequest),
@@ -40,12 +42,14 @@ var ResultNotFound = ResultFormat{
 	Message: http.StatusText(http.StatusNotFound),
 }
 
+// ResultInternalServerErr is a template for Error 500 Internal Server Error
 var ResultInternalServerErr = ResultFormat{
 	Status:  http.StatusInternalServerError,
 	Name:    "InternalServerErr",
 	Message: http.StatusText(http.StatusInternalServerError),
 }
 
+// ResultValidationErr is a template for validation form error
 var ResultValidationErr = ResultFormat{
 	Status:  http.StatusBadRequest,
 	Name:    "ValidationErr",

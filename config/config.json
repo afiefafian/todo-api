@@ -1,12 +1,21 @@
 {
-    "debug": true,
-    "env": "development",
-    "port": "9000",
-    "database": {
-        "host": "",
-        "port": "",
-        "user": "postgres",
-        "pass": "",
-        "name": "todo_app"
-    }
+  "debug": true,
+  "env": "development",
+  "port": "9000",
+  "salt": "qI7Zzl3w1Ucm21JD",
+  "secret": "qI7Zzl3w1Ucm21JD",
+  "database": {
+    "host": "",
+    "port": "",
+    "user": "postgres",
+    "pass": "",
+    "name": "todo_app"
+  },
+  "redis": {
+    "host": "localhost",
+    "port": "6379",
+    "user": "postgres",
+    "password": "",
+    "database": 0
+  }
 }

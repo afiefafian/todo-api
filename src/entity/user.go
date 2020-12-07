@@ -18,6 +18,12 @@ type User struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty" pg:"deleted_at,soft_delete"`
 }
 
+// UserLogin struct defined user form auth
+type UserLogin struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
 // UserServices represent the user's services
 type UserServices interface {
 	Fetch(ctx context.Context) ([]User, error)
@@ -25,6 +31,13 @@ type UserServices interface {
 	Update(ctx context.Context, u *User, id string) error
 	Store(context.Context, *User) error
 	Delete(ctx context.Context, id string) error
+}
+
+// UserAuthServices represent the user's auth services
+type UserAuthServices interface {
+	Authentication(ctx context.Context, login *UserLogin) (User, string, error)
+	GenerateAuthToken(email string) (string, error)
+	Logout(ctx context.Context) error
 }
 
 // UserRepository represent the user's repository contract

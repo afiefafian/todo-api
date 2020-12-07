@@ -2,37 +2,299 @@ package services
 
 import (
 	"context"
+	"crypto/rand"
 	"errors"
+	"fmt"
+	"log"
 	"strings"
+	"time"
 	"todo_api/src/entity"
 )
 
 type registrationServices struct {
 	userRepo         entity.UserRepository
 	registrationRepo entity.RegistrationRepository
+	tokenRepo        entity.TokenRepository
+	cache            entity.CacheRepository
 }
 
 // NewRegistrationServices create new register services
-func NewRegistrationServices(u entity.UserRepository, r entity.RegistrationRepository) entity.RegistrationServices {
+func NewRegistrationServices(u entity.UserRepository, r entity.RegistrationRepository, t entity.TokenRepository, c entity.CacheRepository) entity.RegistrationServices {
 	return &registrationServices{
 		userRepo:         u,
 		registrationRepo: r,
+		tokenRepo:        t,
+		cache:            c,
 	}
 }
 
-// Register and send register otp to user email
-func (r *registrationServices) Register(ctx context.Context, registration *entity.Registration) error {
-	// Check email in db
+// Register user data to temporary and send register otp to user
+func (r *registrationServices) Register(ctx context.Context, registration *entity.Registration) (string, error) {
 	email := strings.Trim(registration.Email, "")
-	user, err := r.userRepo.GetByEmail(ctx, email)
-	if err != nil && err.Error() != "pg: no rows in result set" {
+
+	// Check email in db
+	var (
+		user entity.User
+		err  error
+	)
+	if user, err = r.userRepo.GetByEmail(ctx, email); err != nil {
+		return "", err
+	}
+	if user != (entity.User{}) {
+		return "", errors.New("invalidField: email:Email already registered")
+	}
+
+	cooldownKey := fmt.Sprintf("%s:cooldown", email)
+	retryKey := fmt.Sprintf("%s:retry", email)
+
+	// Check retry
+	retry := r.cache.Get(ctx, retryKey)
+	if retry.Val() != "" && retry.Val() == "0" {
+		ttl := r.cache.TTL(ctx, retryKey)
+		errMsg := fmt.Sprintf("Too much retry, please wait %d minutes", int64(time.Duration(ttl)/time.Minute))
+		return "", errors.New(errMsg)
+	}
+
+	// Check cooldown timer
+	cooldown := r.cache.Get(ctx, cooldownKey)
+	if cooldown.Val() != "" {
+		ttl := r.cache.TTL(ctx, cooldownKey)
+		errMsg := fmt.Sprintf("Wait until %d seconds", int64(time.Duration(ttl)/time.Second))
+		return "", errors.New(errMsg)
+	}
+
+	// Set cooldown timer
+	if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: cooldownKey, Value: email, TTL: 60}); err != nil {
+		log.Printf("Fail set token lifetime : %s", err)
+		return "", err
+	}
+
+	// Set or decrement limiter value for 15 minutes
+	if retry.Val() == "" {
+		if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: retryKey, Value: "3", TTL: 15 * 60}); err != nil {
+			log.Printf("Fail set request limiter : %s", err)
+			return "", err
+		}
+	} else if retry.Val() > "0" {
+		if err = r.cache.Decrement(ctx, retryKey); err != nil {
+			log.Printf("Fail increment request limiter : %s", err)
+			return "", err
+		}
+	}
+
+	// If email is not used
+	// Generate register code
+	var regCode string
+	if regCode, err = r.generateOTPCode(6); err != nil {
+		log.Printf("Failed generate otp code : %s", err)
+		return "", err
+	}
+
+	// Save register  code and data
+	// Deactivate all register token by identifier
+	if err = r.tokenRepo.DeactivateAllByIdentifierAndType(ctx, email, "register"); err != nil {
+		log.Printf("Fail deactive token : %s", err)
+		return "", err
+	}
+
+	if err = r.tokenRepo.CreateNewToken(ctx, &entity.Token{Identifier: email, Type: "register", Code: regCode}); err != nil {
+		log.Printf("Fail save token : %s", err)
+		return "", err
+	}
+
+	if err = r.registrationRepo.StoreOrUpdateIfEmailExist(ctx, registration); err != nil {
+		log.Printf("Fail upsert user register data : %s", err)
+		return "", err
+	}
+
+	// Set register code to redis for 3 minutes
+	if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: email, Value: regCode, TTL: 180}); err != nil {
+		log.Printf("Fail set token lifetime : %s", err)
+		return "", err
+	}
+
+	return regCode, nil
+}
+
+// ResendCode register otp to user
+func (r *registrationServices) ResendCode(ctx context.Context, email string) (string, error) {
+	trimmedEmail := strings.Trim(email, "")
+
+	if email == "" {
+		return "", errors.New("invalidField: email:Email is empty")
+	}
+
+	cooldownKey := fmt.Sprintf("%s:cooldown", trimmedEmail)
+	retryKey := fmt.Sprintf("%s:retry", trimmedEmail)
+
+	// Check retry
+	retry := r.cache.Get(ctx, retryKey)
+	if retry.Val() != "" && retry.Val() == "0" {
+		ttl := r.cache.TTL(ctx, retryKey)
+		errMsg := fmt.Sprintf("tooMuchRetry: Too much retry, please wait %d minutes", int64(time.Duration(ttl)/time.Minute))
+		return "", errors.New(errMsg)
+	}
+
+	// Check cooldown timer
+	cooldown := r.cache.Get(ctx, cooldownKey)
+	if cooldown.Val() != "" {
+		ttl := r.cache.TTL(ctx, cooldownKey)
+		errMsg := fmt.Sprintf("Wait until %d seconds", int64(time.Duration(ttl)/time.Second))
+		return "", errors.New(errMsg)
+	}
+
+	var register entity.Registration
+	var err error
+	if register, err = r.registrationRepo.GetByEmail(ctx, email); err != nil {
+		return "", err
+	}
+
+	var user entity.User
+	if user, err = r.userRepo.GetByEmail(ctx, email); err != nil {
+		return "", err
+	}
+
+	if register == (entity.Registration{}) {
+		return "", errors.New("Please register from the beginning")
+	}
+
+	if register.IsRegistered || user != (entity.User{}) {
+		return "", errors.New("invalidField: email:Email already registered")
+	}
+
+	// Set cooldown timer
+	if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: cooldownKey, Value: email, TTL: 60}); err != nil {
+		log.Printf("Fail set token lifetime : %s", err)
+		return "", err
+	}
+
+	// Set cooldown timer
+	if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: cooldownKey, Value: email, TTL: 60}); err != nil {
+		log.Printf("Fail set token lifetime : %s", err)
+		return "", err
+	}
+
+	// Set or decrement limiter value for 15 minutes
+	if retry.Val() == "" {
+		if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: retryKey, Value: "3", TTL: 15 * 60}); err != nil {
+			log.Printf("Fail set request limiter : %s", err)
+			return "", err
+		}
+	} else if retry.Val() > "0" {
+		if err = r.cache.Decrement(ctx, retryKey); err != nil {
+			log.Printf("Fail increment request limiter : %s", err)
+			return "", err
+		}
+	}
+
+	// Generate register code
+	var regCode string
+	if regCode, err = r.generateOTPCode(6); err != nil {
+		log.Printf("Failed generate otp code : %s", err)
+		return "", err
+	}
+
+	// Save register  code and data
+	// Deactivate all register token by identifier
+	if err = r.tokenRepo.DeactivateAllByIdentifierAndType(ctx, email, "register"); err != nil {
+		log.Printf("Fail deactive token : %s", err)
+		return "", err
+	}
+
+	if err = r.tokenRepo.CreateNewToken(ctx, &entity.Token{Identifier: email, Type: "register", Code: regCode}); err != nil {
+		log.Printf("Fail save token : %s", err)
+		return "", err
+	}
+
+	// Set register code to redis for 3 minutes
+	if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: email, Value: regCode, TTL: 180}); err != nil {
+		log.Printf("Fail set token lifetime : %s", err)
+		return "", err
+	}
+
+	return regCode, nil
+}
+
+// VerifyCode verify registration code and register user data from temporary
+func (r *registrationServices) VerifyCode(ctx context.Context, email string, code string) error {
+	var register entity.Registration
+	var err error
+
+	// Check user registration data
+	if register, err = r.registrationRepo.GetByEmail(ctx, email); err != nil {
 		return err
 	}
 
-	if user != (entity.User{}) {
-		return errors.New("Email already used")
+	// Check if register data is null
+	if register == (entity.Registration{}) {
+		return errors.New("Please register from the beginning")
 	}
-	//if user
-	// If found then return error
+
+	if register.IsRegistered {
+		return errors.New("Email already registered")
+	}
+
+	// Check token is still active
+	verifyCode := r.cache.Get(ctx, email)
+	if verifyCode.Val() == "" {
+		errMsg := fmt.Sprintf("invalidField: code:Verify code is expired")
+		return errors.New(errMsg)
+	}
+
+	// Check token is valid
+	if verifyCode.Val() != code {
+		errMsg := fmt.Sprintf("invalidField: code:Verify code is invalid")
+		return errors.New(errMsg)
+	}
+
+	// Create new user from user temporary data
+	newUser := entity.User{
+		FirstName: register.FirstName,
+		LastName:  register.LastName,
+		Email:     register.Email,
+		Password:  register.Password,
+		Phone:     register.Phone,
+	}
+
+	if err = r.userRepo.Store(ctx, &newUser); err != nil {
+		log.Printf("Failed create : %s", err)
+		return err
+	}
+
+	// Update register data status
+	if err = r.registrationRepo.ChangeStatusToRegistered(ctx, email); err != nil {
+		log.Printf("Failed create : %s", err)
+		return err
+	}
+
+	// Deactivate token in database
+	if err = r.tokenRepo.DeactivateAllByIdentifierAndType(ctx, email, "register"); err != nil {
+		log.Printf("Fail deactive token : %s", err)
+		return err
+	}
+
+	// Deactivate all user token from in memory db
+	if err = r.cache.Delete(ctx, fmt.Sprintf("%s*", email)); err != nil {
+		log.Printf("Failed delete all register token : %s", err)
+		return err
+	}
+
 	return nil
+}
+
+// generateOTPCode generate random number for otp code
+func (r *registrationServices) generateOTPCode(length int) (string, error) {
+	const otpChars = "1234567890"
+	buffer := make([]byte, length)
+	_, err := rand.Read(buffer)
+	if err != nil {
+		return "", err
+	}
+
+	otpCharsLength := len(otpChars)
+	for i := 0; i < length; i++ {
+		buffer[i] = otpChars[int(buffer[i])%otpCharsLength]
+	}
+
+	return string(buffer), nil
 }
