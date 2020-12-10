@@ -2,17 +2,18 @@ package response
 
 import "net/http"
 
+// Response map type declaration
 type Response map[string]interface{}
 
 // ResultFormat struct definition
 type ResultFormat struct {
-	status  int         `json:"status"`
-	name    string      `json:"name"`
-	message interface{} `json:"message"`
-	data    interface{} `json:"data,omitempty"`
-	errors  interface{} `json:"errors,omitempty"`
-	meta    interface{} `json:"meta,omitempty"`
-	trace   interface{} `json:"trace,omitempty"`
+	Status  int         `json:"status"`
+	Name    string      `json:"name"`
+	Message interface{} `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+	Errors  interface{} `json:"errors,omitempty"`
+	Meta    interface{} `json:"meta,omitempty"`
+	Trace   interface{} `json:"trace,omitempty"`
 }
 
 type paginateMeta struct {
@@ -29,9 +30,9 @@ var ResultSuccess = func(msg string) *ResultFormat {
 	}
 
 	return &ResultFormat{
-		status:  http.StatusOK,
-		name:    http.StatusText(http.StatusOK),
-		message: message,
+		Status:  http.StatusOK,
+		Name:    http.StatusText(http.StatusOK),
+		Message: message,
 	}
 }
 
@@ -43,49 +44,54 @@ var ResultErr = func(msg string) *ResultFormat {
 	}
 
 	return &ResultFormat{
-		status:  http.StatusBadRequest,
-		name:    http.StatusText(http.StatusBadRequest),
-		message: message,
+		Status:  http.StatusBadRequest,
+		Name:    http.StatusText(http.StatusBadRequest),
+		Message: message,
 	}
 }
 
-// resultNotFound is a template for Not Found error
+// ResultNotFound is a template for Not Found error
 var ResultNotFound = ResultFormat{
-	status:  http.StatusNotFound,
-	name:    "NotFound",
-	message: http.StatusText(http.StatusNotFound),
+	Status:  http.StatusNotFound,
+	Name:    "NotFound",
+	Message: http.StatusText(http.StatusNotFound),
 }
 
 // ResultInternalServerErr is a template for Error 500 Internal Server Error
 var ResultInternalServerErr = ResultFormat{
-	status:  http.StatusInternalServerError,
-	name:    "InternalServerErr",
-	message: http.StatusText(http.StatusInternalServerError),
+	Status:  http.StatusInternalServerError,
+	Name:    "InternalServerErr",
+	Message: http.StatusText(http.StatusInternalServerError),
 }
 
 // ResultValidationErr is a template for validation form error
 var ResultValidationErr = ResultFormat{
-	status:  http.StatusBadRequest,
-	name:    "ValidationErr",
-	message: "Validation Error",
+	Status:  http.StatusBadRequest,
+	Name:    "ValidationErr",
+	Message: "Validation Error",
 }
 
+// SetStatus set status code on ResultFormat struct
 func (r *ResultFormat) SetStatus(status int) {
-	r.status = status
+	r.Status = status
 }
 
+// SetName set name on ResultFormat struct
 func (r *ResultFormat) SetName(name string) {
-	r.name = name
+	r.Name = name
 }
 
+// SetMessage set message on ResultFormat struct
 func (r *ResultFormat) SetMessage(msg interface{}) {
-	r.message = msg
+	r.Message = msg
 }
 
+// SetData set data on ResultFormat struct
 func (r *ResultFormat) SetData(data interface{}) {
-	r.data = data
+	r.Data = data
 }
 
+// SetErrors ser error message on ResultFormat struct
 func (r *ResultFormat) SetErrors(errors interface{}) {
-	r.errors = errors
+	r.Errors = errors
 }

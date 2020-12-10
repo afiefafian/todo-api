@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/go-redis/redis/v8"
 
 	httpDelivery "todo_api/src/delivery/http"
 

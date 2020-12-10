@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+
 	"github.com/go-pg/pg/v10"
 
 	"todo_api/src/entity"
@@ -11,7 +12,7 @@ type pgsqlTokenRepository struct {
 	DB *pg.DB
 }
 
-// NewPostgresUserRepository create an data to represent user.Repository interface
+// NewPostgresTokenRepository create an data to represent token.Repository interface
 func NewPostgresTokenRepository(DB *pg.DB) entity.TokenRepository {
 	return &pgsqlTokenRepository{DB}
 }

@@ -1,13 +1,14 @@
 package http
 
 import (
-	"github.com/go-redis/redis/v8"
 	"net/http"
 	"todo_api/src/delivery/http/middleware"
 	"todo_api/src/delivery/http/response"
 	pgsqlRepo "todo_api/src/repository/postgres"
 	redisRepo "todo_api/src/repository/redis"
 	"todo_api/src/services"
+
+	"github.com/go-redis/redis/v8"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/julienschmidt/httprouter"

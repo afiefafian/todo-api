@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2a5c787d-d4a2-4bcd-95f0-5e6b58c5ac7d" name="Default Changelist" comment="Add stat=">
+    <list default="true" id="2a5c787d-d4a2-4bcd-95f0-5e6b58c5ac7d" name="Default Changelist" comment="Add user token on success registration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/http_delivery.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/http_delivery.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/response/error_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/response/error_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/response/response_type.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/response/response_type.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/response/success_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/response/success_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/user_auth_http.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/user_auth_http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/user_http.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/user_http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/delivery/http/user_register_http.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/user_register_http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/registration.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/registration.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/postgres/pgsql_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/postgres/pgsql_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/redis/redis_registration.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/redis/redis_registration.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/auth_services.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth_services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/registration_services.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/registration_services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/user_services.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/user_services.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +104,8 @@
     <MESSAGE value="Remove vendor folder" />
     <MESSAGE value="Add registration endpoints&#10;- Add resend verify code endpoint&#10;- Add verify code endpoint" />
     <MESSAGE value="Add auth endpoint" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add auth endpoint" />
+    <MESSAGE value="Add user token on success registration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add user token on success registration" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -144,11 +131,11 @@
     </state>
     <state x="488" y="-876" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607330977472" />
     <state x="533" y="170" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316441558" />
-    <state x="313" y="22" key="CommitChangelistDialog2" timestamp="1607432986172">
+    <state x="313" y="22" key="CommitChangelistDialog2" timestamp="1607588484879">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="194" y="-1054" key="CommitChangelistDialog2/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607366611570" />
-    <state x="313" y="22" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1607432986172" />
+    <state x="313" y="22" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1607588484879" />
     <state x="232" y="-831" key="EditFileWatcherDialog" timestamp="1606727989064">
       <screen x="-223" y="-1080" width="1920" height="1080" />
     </state>
@@ -157,49 +144,49 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="611" y="315" key="EnvironmentVariablesDialog/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1606725501817" />
-    <state width="1398" height="215" key="GridCell.Tab.0.bottom" timestamp="1607578448439">
+    <state width="1398" height="213" key="GridCell.Tab.0.bottom" timestamp="1607591727002">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.bottom/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989576" />
     <state width="1007" height="159" key="GridCell.Tab.0.bottom/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351846" />
     <state width="1398" height="142" key="GridCell.Tab.0.bottom/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259100" />
-    <state width="1398" height="215" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1607578448439" />
+    <state width="1398" height="213" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1607591727002" />
     <state width="1398" height="225" key="GridCell.Tab.0.bottom/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613770" />
     <state width="1007" height="159" key="GridCell.Tab.0.bottom/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361368" />
-    <state width="672" height="159" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1607423968226" />
+    <state width="1398" height="214" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1607590655888" />
     <state width="978" height="142" key="GridCell.Tab.0.bottom/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969897" />
-    <state width="1398" height="215" key="GridCell.Tab.0.center" timestamp="1607578448437">
+    <state width="1398" height="213" key="GridCell.Tab.0.center" timestamp="1607591726998">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.center/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989574" />
     <state width="1007" height="159" key="GridCell.Tab.0.center/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351844" />
     <state width="1398" height="142" key="GridCell.Tab.0.center/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259098" />
-    <state width="1398" height="215" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1607578448437" />
+    <state width="1398" height="213" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1607591726998" />
     <state width="1398" height="225" key="GridCell.Tab.0.center/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613745" />
     <state width="1007" height="159" key="GridCell.Tab.0.center/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361366" />
-    <state width="672" height="159" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1607423968225" />
+    <state width="1398" height="214" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1607590655886" />
     <state width="978" height="142" key="GridCell.Tab.0.center/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969894" />
-    <state width="1398" height="215" key="GridCell.Tab.0.left" timestamp="1607578448433">
+    <state width="1398" height="213" key="GridCell.Tab.0.left" timestamp="1607591726996">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.left/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989572" />
     <state width="1007" height="159" key="GridCell.Tab.0.left/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351843" />
     <state width="1398" height="142" key="GridCell.Tab.0.left/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259096" />
-    <state width="1398" height="215" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1607578448433" />
+    <state width="1398" height="213" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1607591726996" />
     <state width="1398" height="225" key="GridCell.Tab.0.left/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613741" />
     <state width="1007" height="159" key="GridCell.Tab.0.left/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361364" />
-    <state width="672" height="159" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1607423968224" />
+    <state width="1398" height="214" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1607590655884" />
     <state width="978" height="142" key="GridCell.Tab.0.left/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969893" />
-    <state width="1398" height="215" key="GridCell.Tab.0.right" timestamp="1607578448438">
+    <state width="1398" height="213" key="GridCell.Tab.0.right" timestamp="1607591727000">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.right/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989575" />
     <state width="1007" height="159" key="GridCell.Tab.0.right/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351845" />
     <state width="1398" height="142" key="GridCell.Tab.0.right/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259099" />
-    <state width="1398" height="215" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1607578448438" />
+    <state width="1398" height="213" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1607591727000" />
     <state width="1398" height="225" key="GridCell.Tab.0.right/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613756" />
     <state width="1007" height="159" key="GridCell.Tab.0.right/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361367" />
-    <state width="672" height="159" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1607423968225" />
+    <state width="1398" height="214" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1607590655887" />
     <state width="978" height="142" key="GridCell.Tab.0.right/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969895" />
     <state width="1398" height="304" key="GridCell.Tab.1.bottom" timestamp="1607509962890">
       <screen x="0" y="0" width="1440" height="900" />

@@ -1,0 +1,13 @@
+Index: src/delivery/http/middleware/error_handler.go
+===================================================================
+--- src/delivery/http/middleware/error_handler.go	(revision ea9f015b5a730c29e6a9629924457b769f3620c1)
++++ src/delivery/http/middleware/error_handler.go	(revision ea9f015b5a730c29e6a9629924457b769f3620c1)
+@@ -1,8 +0,0 @@
+-package middleware
+-
+-import "net/http"
+-
+-// JSONHeader set response header type data to json
+-func ErrorHandler(w http.ResponseWriter, _ *http.Request) {
+-	w.Header().Set("Content-Type", "application/json")
+-}

@@ -2,9 +2,10 @@ package postgres
 
 import (
 	"context"
+	"todo_api/src/entity"
+
 	"github.com/go-pg/pg/v10"
 	"github.com/google/uuid"
-	"todo_api/src/entity"
 )
 
 type pgsqlUserRepository struct {

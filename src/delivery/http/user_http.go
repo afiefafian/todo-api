@@ -30,7 +30,6 @@ func userHTTPRouter(r *httpRouter, u entity.UserServices) {
 
 // FetchUsers http routing handler for get user
 func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
 	ctx := r.Context()
 	data, err := u.UserServices.Fetch(ctx)
 	if err != nil {
@@ -46,7 +45,6 @@ func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, _ httpr
 
 // GetUserByID : http routing handler for get user
 func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-
 	ctx := r.Context()
 	userID := ps.ByName("id")
 	data, err := u.UserServices.GetByID(ctx, userID)
@@ -63,7 +61,6 @@ func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps htt
 
 // Store will store the article by given request body
 func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
 	var user entity.User
 	json.NewDecoder(r.Body).Decode(&user)
 

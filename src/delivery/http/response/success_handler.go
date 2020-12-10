@@ -25,9 +25,9 @@ func parseToByte(resultPtr interface{}) (*[]byte, int) {
 	result, err := json.Marshal(resultPtr)
 	if err != nil {
 		response := ResultFormat{
-			status:  http.StatusBadRequest,
-			name:    http.StatusText(http.StatusBadRequest),
-			message: "Failed parse data to json",
+			Status:  http.StatusBadRequest,
+			Name:    http.StatusText(http.StatusBadRequest),
+			Message: "Failed parse data to json",
 		}
 		errRes, _ := json.Marshal(response)
 		return &errRes, http.StatusBadRequest
@@ -41,7 +41,7 @@ func parseToByte(resultPtr interface{}) (*[]byte, int) {
 	return &result, code
 }
 
-// getStatusCodeFromResult get status code from result data
+// getStatusCodeFromResult get Status code from result data
 func getStatusCodeFromResult(resultPtr interface{}) int {
 	resultReflect := reflect.ValueOf(resultPtr)
 	// Get reflect data from pointer
@@ -52,8 +52,8 @@ func getStatusCodeFromResult(resultPtr interface{}) int {
 	if resultReflect.Kind() == reflect.Struct {
 		// Get info by field name
 		if _, valid := resultReflect.Type().FieldByName("Status"); valid {
-			status := resultReflect.FieldByName("Status").Int()
-			return int(status)
+			Status := resultReflect.FieldByName("Status").Int()
+			return int(Status)
 		}
 	}
 
