@@ -69,6 +69,6 @@ func initMemBD() *redis.Client {
 func initMessage() {
 	fmt.Println("\n   _____  __ ____  __ _____  __  __ ____\n  / ___/ / //_/\\ \\/ // ___/ / / / //  _/\n  \\__ \\ / ,<    \\  / \\__ \\ / /_/ / / /  \n ___/ // /| |   / / ___/ // __  /_/ /   \n/____//_/ |_|  /_/ /____//_/ /_//___/ ")
 	fmt.Println("@2020 Powered by: HTTPRouter\n")
-	log.Println("Listening on : %v", viper.GetString(`port`))
+	log.Printf("Listening on : %v\n", viper.GetString(`port`))
 	log.Println("--------------------------------")
 }
