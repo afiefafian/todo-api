@@ -20,7 +20,9 @@ type httpRouter struct {
 
 // NewRouter initialize http route handler
 func NewRouter(db *pg.DB, inMem *redis.Client) *httpRouter {
-	r := &httpRouter{*httprouter.New()}
+	r := &httpRouter{
+		Router: *httprouter.New(),
+	}
 
 	// Set Global Middleware
 	r.Router.GlobalOPTIONS = http.HandlerFunc(middleware.CORS)

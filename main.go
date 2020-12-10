@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/go-redis/redis/v8"
-
 	httpDelivery "todo_api/src/delivery/http"
+	httpMiddleware "todo_api/src/delivery/http/middleware"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/spf13/viper"
@@ -32,9 +32,8 @@ func main() {
 	// Init router
 	r := httpDelivery.NewRouter(db, memDB)
 
-	log.Println("SKYSHI @2020 ----")
-	log.Printf("Listening on : %v", viper.GetString(`port`))
-	log.Fatal(http.ListenAndServe(":"+viper.GetString("port"), &r.Router))
+	initMessage()
+	log.Fatal(http.ListenAndServe(":"+viper.GetString("port"), httpMiddleware.HTTPLogger(&r.Router)))
 }
 
 func config() {
@@ -58,11 +57,18 @@ func initMemBD() *redis.Client {
 	password := viper.GetString(`redis.password`)
 	db, _ := strconv.Atoi(viper.GetString(`redis.db`))
 
-	redis := redis.NewClient(&redis.Options{
+	redisClient := redis.NewClient(&redis.Options{
 		Addr:     address,
 		Username: username,
 		Password: password,
 		DB:       db,
 	})
-	return redis
+	return redisClient
+}
+
+func initMessage() {
+	fmt.Println("\n   _____  __ ____  __ _____  __  __ ____\n  / ___/ / //_/\\ \\/ // ___/ / / / //  _/\n  \\__ \\ / ,<    \\  / \\__ \\ / /_/ / / /  \n ___/ // /| |   / / ___/ // __  /_/ /   \n/____//_/ |_|  /_/ /____//_/ /_//___/ ")
+	fmt.Println("@2020 Powered by: HTTPRouter\n")
+	log.Println("Listening on : %v", viper.GetString(`port`))
+	log.Println("--------------------------------")
 }
