@@ -48,5 +48,5 @@ func setRoute(r *httpRouter, db *pg.DB, inMem *redis.Client) {
 	// Set Route
 	userHTTPRouter(r, us)
 	userAuthHTTPRouter(r, aus)
-	userRegisterHTTPRouter(r, rs)
+	userRegisterHTTPRouter(r, rs, aus, us)
 }

@@ -40,8 +40,11 @@ func (r redisRegistrationRepository) SetWithTTL(ctx context.Context, c *entity.C
 func (r redisRegistrationRepository) Delete(ctx context.Context, key string) error {
 	formattedKey := fmt.Sprintf(`%s:%s`, r.keyPrefix, key)
 	keys := r.memDB.Keys(ctx, formattedKey)
-	fmt.Println(keys.Val())
-	r.memDB.Del(ctx, formattedKey)
+
+	for _, v := range keys.Val() {
+		r.memDB.Del(ctx, v)
+	}
+
 	return nil
 }
 

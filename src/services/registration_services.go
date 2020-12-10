@@ -18,7 +18,7 @@ type registrationServices struct {
 	cache            entity.CacheRepository
 }
 
-// NewRegistrationServices create new register services
+// NewRegistrationServices create new registration services
 func NewRegistrationServices(u entity.UserRepository, r entity.RegistrationRepository, t entity.TokenRepository, c entity.CacheRepository) entity.RegistrationServices {
 	return &registrationServices{
 		userRepo:         u,
@@ -28,15 +28,26 @@ func NewRegistrationServices(u entity.UserRepository, r entity.RegistrationRepos
 	}
 }
 
+var cacheKey = map[string]string{
+	"cooldown": "cooldown",
+	"retry":    "retry",
+}
+
+var errMessages = map[string]string{
+	"failedVerify": "Already failed 10 times, please wait for 10 minutes",
+}
+
 // Register user data to temporary and send register otp to user
 func (r *registrationServices) Register(ctx context.Context, registration *entity.Registration) (string, error) {
-	email := strings.Trim(registration.Email, "")
-
-	// Check email in db
 	var (
-		user entity.User
-		err  error
+		user  entity.User
+		err   error
+		email = strings.Trim(registration.Email, "")
+		// Cache Key
+		cooldownKey = fmt.Sprintf("%s:%s", email, cacheKey["cooldown"])
+		retryKey    = fmt.Sprintf("%s:%s", email, cacheKey["retry"])
 	)
+
 	if user, err = r.userRepo.GetByEmail(ctx, email); err != nil {
 		return "", err
 	}
@@ -44,8 +55,10 @@ func (r *registrationServices) Register(ctx context.Context, registration *entit
 		return "", errors.New("invalidField: email:Email already registered")
 	}
 
-	cooldownKey := fmt.Sprintf("%s:cooldown", email)
-	retryKey := fmt.Sprintf("%s:retry", email)
+	// Check register status
+	if err = r.registerStatus(ctx, email); err != nil {
+		return "", err
+	}
 
 	// Check retry
 	retry := r.cache.Get(ctx, retryKey)
@@ -162,6 +175,11 @@ func (r *registrationServices) ResendCode(ctx context.Context, email string) (st
 		return "", errors.New("invalidField: email:Email already registered")
 	}
 
+	// Check register status
+	if err = r.registerStatus(ctx, email); err != nil {
+		return "", err
+	}
+
 	// Set cooldown timer
 	if err = r.cache.SetWithTTL(ctx, &entity.Cache{Key: cooldownKey, Value: email, TTL: 60}); err != nil {
 		log.Printf("Fail set token lifetime : %s", err)
@@ -234,6 +252,11 @@ func (r *registrationServices) VerifyCode(ctx context.Context, email string, cod
 		return errors.New("Email already registered")
 	}
 
+	// Check register status
+	if err = r.registerStatus(ctx, email); err != nil {
+		return errors.New(fmt.Sprintf("invalidField: code:%s", err))
+	}
+
 	// Check token is still active
 	verifyCode := r.cache.Get(ctx, email)
 	if verifyCode.Val() == "" {
@@ -243,6 +266,12 @@ func (r *registrationServices) VerifyCode(ctx context.Context, email string, cod
 
 	// Check token is valid
 	if verifyCode.Val() != code {
+		// Failed retry
+		if err = r.setOrDecrementFailedVerifyRetry(ctx, email); err != nil {
+			r.setFailedVerifyRetryTimedown(ctx, email)
+			return errors.New(fmt.Sprintf("invalidField: code:%s", err))
+		}
+
 		errMsg := fmt.Sprintf("invalidField: code:Verify code is invalid")
 		return errors.New(errMsg)
 	}
@@ -257,13 +286,13 @@ func (r *registrationServices) VerifyCode(ctx context.Context, email string, cod
 	}
 
 	if err = r.userRepo.Store(ctx, &newUser); err != nil {
-		log.Printf("Failed create : %s", err)
+		log.Printf("Failed create a new user : %s", err)
 		return err
 	}
 
 	// Update register data status
 	if err = r.registrationRepo.ChangeStatusToRegistered(ctx, email); err != nil {
-		log.Printf("Failed create : %s", err)
+		log.Printf("Failed change user status to registered : %s", err)
 		return err
 	}
 
@@ -297,4 +326,39 @@ func (r *registrationServices) generateOTPCode(length int) (string, error) {
 	}
 
 	return string(buffer), nil
+}
+
+// setOrDecrementFailedVerifyRetry set or decrement failed retry
+func (r *registrationServices) setOrDecrementFailedVerifyRetry(ctx context.Context, key string) error {
+	failedRetryKey := fmt.Sprintf("%s:failedretry", key)
+	failedRetry := r.cache.Get(ctx, failedRetryKey)
+	if failedRetry.Val() == "" {
+		r.cache.SetWithTTL(ctx, &entity.Cache{Key: failedRetryKey, Value: "9", TTL: 60 * 2})
+		return nil
+	}
+	fmt.Println(failedRetry)
+	r.cache.Decrement(ctx, failedRetryKey)
+	if failedRetry.Val() == "0" {
+		return errors.New("Already failed 10 times, please wait for 10 minutes")
+	}
+
+	return nil
+}
+
+// setFailedVerifyRetryTimedown set failed code
+func (r *registrationServices) setFailedVerifyRetryTimedown(ctx context.Context, key string) {
+	failedRetryTimedownKey := fmt.Sprintf("%s:failedretrytimedown", key)
+	r.cache.SetWithTTL(ctx, &entity.Cache{Key: failedRetryTimedownKey, Value: key, TTL: 60 * 10})
+	return
+}
+
+// registerStatus check redis error
+func (r *registrationServices) registerStatus(ctx context.Context, key string) error {
+	failedRetryTimedownKey := fmt.Sprintf("%s:failedretrytimedown", key)
+	status := r.cache.Get(ctx, failedRetryTimedownKey)
+
+	if status.Val() != "" {
+		return errors.New("Already failed 10 times, please wait for 10 minutes")
+	}
+	return nil
 }

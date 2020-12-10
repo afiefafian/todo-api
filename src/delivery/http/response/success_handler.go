@@ -25,9 +25,9 @@ func parseToByte(resultPtr interface{}) (*[]byte, int) {
 	result, err := json.Marshal(resultPtr)
 	if err != nil {
 		response := ResultFormat{
-			Status:  http.StatusBadRequest,
-			Name:    http.StatusText(http.StatusBadRequest),
-			Message: "Failed parse data to json",
+			status:  http.StatusBadRequest,
+			name:    http.StatusText(http.StatusBadRequest),
+			message: "Failed parse data to json",
 		}
 		errRes, _ := json.Marshal(response)
 		return &errRes, http.StatusBadRequest

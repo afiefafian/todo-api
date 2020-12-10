@@ -7,7 +7,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
-	"os"
 	"strings"
 	"time"
 	"todo_api/src/entity"
@@ -64,17 +63,16 @@ func (u userAuthServices) Logout(ctx context.Context) error {
 }
 
 func (u userAuthServices) GenerateAuthToken(identifier string) (string, error) {
-	os.Setenv("ACCESS_SECRET", viper.GetString("secret"))
-
 	atClaims := jwt.MapClaims{
 		"authorized": true,
 		"user_id":    identifier,
-		"exp":        time.Now().Add(time.Minute * 60 * 24 * 14).Unix(),
+		"exp":        time.Now().Add(time.Minute * 60 * 24 * 1).Unix(),
 	}
 
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 
-	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	secret := viper.GetString("secret")
+	token, err := at.SignedString([]byte(secret))
 	if err != nil {
 		return "", err
 	}

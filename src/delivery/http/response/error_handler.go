@@ -19,7 +19,7 @@ func PanicHandler() func(http.ResponseWriter, *http.Request, interface{}) {
 		response := ResultInternalServerErr
 		if env := viper.GetString(`env`); env == "development" {
 			if rcv != nil {
-				response.Message = rcv
+				response.SetMessage(rcv)
 			}
 		}
 
@@ -47,9 +47,9 @@ func JSONError(w http.ResponseWriter, error string, code int) {
 		return
 	}
 
-	response := ResultErr
-	response.Status = code
-	response.Message = error
+	response := ResultErr("")
+	response.SetStatus(code)
+	response.SetMessage(error)
 	JSONResult(w, &response)
 }
 
@@ -57,7 +57,7 @@ func JSONError(w http.ResponseWriter, error string, code int) {
 // Error is in message field, only 1 error can contain in message.
 func JSONErrorValidation(w http.ResponseWriter, msg string) {
 	response := ResultValidationErr
-	response.Message = msg
+	response.SetMessage(msg)
 	JSONResult(w, &response)
 }
 
@@ -65,6 +65,6 @@ func JSONErrorValidation(w http.ResponseWriter, msg string) {
 // Error will be listed in the error field per input field.
 func JSONErrorValidationWithField(w http.ResponseWriter, errors interface{}) {
 	response := ResultValidationErr
-	response.Errors = errors
+	response.SetErrors(errors)
 	JSONResult(w, &response)
 }

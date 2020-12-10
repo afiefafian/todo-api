@@ -27,11 +27,8 @@ func userAuthHTTPRouter(r *httpRouter, u entity.UserAuthServices) {
 
 // FetchUsers http routing handler for get user
 func (u *UserAuthHandler) Authentication(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	res := response.ResultSuccess
-
 	var userLogin entity.UserLogin
 	json.NewDecoder(r.Body).Decode(&userLogin)
-
 	// Validation
 	if ok := response.ValidateAndReturnErrResultHTTPWithErrField(w, &userLogin); !ok {
 		return
@@ -41,19 +38,23 @@ func (u *UserAuthHandler) Authentication(w http.ResponseWriter, r *http.Request,
 		user  entity.User
 		token string
 		err   error
+		ctx   = r.Context()
 	)
-
-	ctx := r.Context()
 
 	if user, token, err = u.UserAuthServices.Authentication(ctx, &userLogin); err != nil {
 		response.JSONError(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	res.Data = map[string]interface{}{
-		"user":  user,
-		"token": token,
+	data := response.Response{
+		"user": user,
+		"token": response.Response{
+			"jwt":     token,
+			"refresh": "",
+		},
 	}
+	res := response.ResultSuccess("")
+	res.SetData(data)
 
 	response.JSONResult(w, res)
 	return

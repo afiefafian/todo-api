@@ -30,7 +30,6 @@ func userHTTPRouter(r *httpRouter, u entity.UserServices) {
 
 // FetchUsers http routing handler for get user
 func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	res := response.ResultSuccess
 
 	ctx := r.Context()
 	data, err := u.UserServices.Fetch(ctx)
@@ -39,14 +38,14 @@ func (u *UserHandler) FetchUsers(w http.ResponseWriter, r *http.Request, _ httpr
 		return
 	}
 
-	res.Data = data
+	res := response.ResultSuccess("")
+	res.SetData(data)
 	response.JSONResult(w, res)
 	return
 }
 
 // GetUserByID : http routing handler for get user
 func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	res := response.ResultSuccess
 
 	ctx := r.Context()
 	userID := ps.ByName("id")
@@ -56,15 +55,14 @@ func (u *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	res.Data = data
+	res := response.ResultSuccess("")
+	res.SetData(data)
 	response.JSONResult(w, &res)
 	return
 }
 
 // Store will store the article by given request body
 func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	res := response.ResultSuccess
-	res.Message = "Success create an user"
 
 	var user entity.User
 	json.NewDecoder(r.Body).Decode(&user)
@@ -81,15 +79,13 @@ func (u *UserHandler) Store(w http.ResponseWriter, r *http.Request, _ httprouter
 		return
 	}
 
+	res := response.ResultSuccess("Success create an user")
 	response.JSONResult(w, &res)
 	return
 }
 
 // Update will update user data by given request body
 func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	res := response.ResultSuccess
-	res.Message = "Success update an user"
-
 	var user entity.User
 	json.NewDecoder(r.Body).Decode(&user)
 
@@ -106,14 +102,13 @@ func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
+	res := response.ResultSuccess("Success update an user")
 	response.JSONResult(w, &res)
 	return
 }
 
 // Delete will delete the user by id
 func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	res := response.ResultSuccess
-	res.Message = "Success delete an user"
 
 	// Delete user
 	ctx := r.Context()
@@ -123,6 +118,7 @@ func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
+	res := response.ResultSuccess("Success delete an user")
 	response.JSONResult(w, &res)
 	return
 }

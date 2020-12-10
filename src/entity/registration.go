@@ -42,7 +42,7 @@ func (r *Registration) BeforeUpdate(ctx context.Context) (context.Context, error
 
 // RegistrationServices represent the registration's services
 type RegistrationServices interface {
-	Register(context.Context, *Registration) (string, error)
+	Register(ctx context.Context, r *Registration) (string, error)
 	ResendCode(ctx context.Context, email string) (string, error)
 	VerifyCode(ctx context.Context, email string, code string) error
 }

@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"todo_api/src/delivery/http/response"
 	"todo_api/src/entity"
@@ -12,13 +13,17 @@ import (
 // UserHandler handling user services
 type UserRegisterHandler struct {
 	Router               *httpRouter
+	UserServices         entity.UserServices
+	UserAuthServices     entity.UserAuthServices
 	RegistrationServices entity.RegistrationServices
 }
 
-func userRegisterHTTPRouter(r *httpRouter, rs entity.RegistrationServices) {
+func userRegisterHTTPRouter(r *httpRouter, rs entity.RegistrationServices, ua entity.UserAuthServices, u entity.UserServices) {
 	handler := &UserRegisterHandler{
 		Router:               r,
+		UserServices:         u,
 		RegistrationServices: rs,
+		UserAuthServices:     ua,
 	}
 
 	r.Router.POST("/users/register/", handler.RegisterUser)
@@ -28,9 +33,6 @@ func userRegisterHTTPRouter(r *httpRouter, rs entity.RegistrationServices) {
 
 // RegisterUser register user and send confirmation code
 func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	res := response.ResultSuccess
-	res.Message = "Success send registration code"
-
 	var user entity.Registration
 	json.NewDecoder(r.Body).Decode(&user)
 
@@ -46,14 +48,13 @@ func (u *UserRegisterHandler) RegisterUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	res := response.ResultSuccess("Success send registration code")
 	response.JSONResult(w, &res)
 	return
 }
 
 // RegisterUser register user and send confirmation code
 func (u *UserRegisterHandler) ResendCode(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	res := response.ResultSuccess
-	res.Message = "Success resend registration code"
 
 	var user entity.RegistrationResendValidation
 	json.NewDecoder(r.Body).Decode(&user)
@@ -71,30 +72,54 @@ func (u *UserRegisterHandler) ResendCode(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
+	res := response.ResultSuccess("Success resend registration code")
 	response.JSONResult(w, &res)
 	return
 }
 
 // VerifyCode verify registration code
 func (u *UserRegisterHandler) VerifyCode(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	res := response.ResultSuccess
-	res.Message = "Success register new user"
-
-	var user entity.RegistrationVerifyValidation
-	json.NewDecoder(r.Body).Decode(&user)
+	var userVerify entity.RegistrationVerifyValidation
+	json.NewDecoder(r.Body).Decode(&userVerify)
 
 	// Validation
-	if ok := response.ValidateAndReturnErrResultHTTPWithErrField(w, &user); !ok {
+	if ok := response.ValidateAndReturnErrResultHTTPWithErrField(w, &userVerify); !ok {
 		return
 	}
 
 	ctx := r.Context()
-	email := user.Email
-	code := user.Code
+	email := userVerify.Email
+	code := userVerify.Code
 	if err := u.RegistrationServices.VerifyCode(ctx, email, code); err != nil {
 		response.JSONError(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	var user entity.User
+	var err error
+	if user, err = u.UserServices.GetByEmail(ctx, email); err != nil {
+		response.JSONError(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var token string
+	identifier := fmt.Sprintf("%s", user.ID)
+	if token, err = u.UserAuthServices.GenerateAuthToken(identifier); err != nil {
+		response.JSONError(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	user.Password = ""
+	data := response.Response{
+		"user": user,
+		"token": response.Response{
+			"jwt":     token,
+			"refresh": "",
+		},
+	}
+
+	res := response.ResultSuccess("Success register new user")
+	res.SetData(data)
 
 	response.JSONResult(w, &res)
 	return

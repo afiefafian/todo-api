@@ -32,6 +32,14 @@ func (u *userServices) GetByID(c context.Context, id string) (res entity.User, e
 	return
 }
 
+func (u *userServices) GetByEmail(c context.Context, email string) (user entity.User, err error) {
+	user, err = u.userRepo.GetByEmail(c, email)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (u *userServices) Store(c context.Context, user *entity.User) error {
 	if err := u.userRepo.Store(c, user); err != nil {
 		return err

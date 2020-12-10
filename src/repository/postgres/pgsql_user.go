@@ -3,7 +3,7 @@ package postgres
 import (
 	"context"
 	"github.com/go-pg/pg/v10"
-
+	"github.com/google/uuid"
 	"todo_api/src/entity"
 )
 
@@ -23,8 +23,11 @@ func (p *pgsqlUserRepository) Fetch(context.Context) (res []entity.User, err err
 }
 
 func (p *pgsqlUserRepository) GetByID(_ context.Context, id string) (entity.User, error) {
-	user := entity.User{}
-	err := p.DB.Model(&user).Where("id = ?", id).First()
+	uid, _ := uuid.Parse(id)
+	user := entity.User{
+		ID: uid,
+	}
+	err := p.DB.Model(&user).WherePK().First()
 	return user, queryErrHandling(err)
 }
 
