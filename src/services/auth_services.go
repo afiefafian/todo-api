@@ -22,6 +22,7 @@ func NewUserAuthServices(u entity.UserRepository) entity.UserAuthServices {
 		userRepo: u,
 	}
 }
+
 func (u userAuthServices) Authentication(ctx context.Context, login *entity.UserLogin) (entity.User, string, error) {
 	var (
 		user  entity.User
