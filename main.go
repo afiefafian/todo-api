@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
-	httpDelivery "todo_api/src/delivery/http"
-	httpMiddleware "todo_api/src/delivery/http/middleware"
+	httpDelivery "github.com/afiefafian/todo-api/src/delivery/http"
+	httpMiddleware "github.com/afiefafian/todo-api/src/delivery/http/middleware"
 
 	"github.com/go-pg/pg/v10"
 	"github.com/spf13/viper"

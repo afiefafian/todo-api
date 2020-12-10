@@ -1,4 +1,4 @@
-module todo_api
+module github.com/afiefafian/todo-api
 
 go 1.15
 

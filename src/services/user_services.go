@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	"todo_api/src/entity"
+	"github.com/afiefafian/todo-api/src/entity"
 )
 
 type userServices struct {

@@ -30,10 +30,23 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a5c787d-d4a2-4bcd-95f0-5e6b58c5ac7d" name="Default Changelist" comment="Merge branch 'main' of https://github.com/afiefafian/todo-api into development&#10;&#10;# Conflicts:&#10;#&#9;.gitignore">
+    <list default="true" id="2a5c787d-d4a2-4bcd-95f0-5e6b58c5ac7d" name="Default Changelist" comment="Change go path to github.com/afiefafian/todo-api">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/delivery/http/http_delivery.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/http_delivery.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/delivery/http/middleware/json_header.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/delivery/http/response/validation_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/response/validation_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/delivery/http/user_auth_http.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/user_auth_http.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/delivery/http/user_http.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/user_http.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/delivery/http/user_register_http.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/delivery/http/user_register_http.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/postgres/pgsql_registration.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/postgres/pgsql_registration.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/postgres/pgsql_token.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/postgres/pgsql_token.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/postgres/pgsql_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/postgres/pgsql_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/redis/redis_registration.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/redis/redis_registration.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/auth_services.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth_services.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/registration_services.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/registration_services.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/user_services.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/user_services.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +122,7 @@
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/main.go" />
-      <package value="todo_api" />
+      <package value="github.com/afiefafian/todo-api" />
       <directory value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
@@ -150,6 +163,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="Add response handler" />
     <MESSAGE value="Add response handler and reformat http handler" />
     <MESSAGE value="Add gitignore" />
@@ -160,7 +174,9 @@
     <MESSAGE value="Add user token on success registration" />
     <MESSAGE value="Add global http logger" />
     <MESSAGE value="Merge branch 'main' of https://github.com/afiefafian/todo-api into development&#10;&#10;# Conflicts:&#10;#&#9;.gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'main' of https://github.com/afiefafian/todo-api into development&#10;&#10;# Conflicts:&#10;#&#9;.gitignore" />
+    <MESSAGE value="Change readme" />
+    <MESSAGE value="Change go path to github.com/afiefafian/todo-api" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change go path to github.com/afiefafian/todo-api" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -186,11 +202,11 @@
     </state>
     <state x="488" y="-876" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607330977472" />
     <state x="533" y="170" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316441558" />
-    <state x="313" y="0" key="CommitChangelistDialog2" timestamp="1607602949989">
+    <state x="313" y="0" key="CommitChangelistDialog2" timestamp="1607605132758">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="194" y="-1054" key="CommitChangelistDialog2/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607366611570" />
-    <state x="313" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1607602949989" />
+    <state x="313" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1607605132758" />
     <state x="232" y="-831" key="EditFileWatcherDialog" timestamp="1606727989064">
       <screen x="-223" y="-1080" width="1920" height="1080" />
     </state>
@@ -199,46 +215,46 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="611" y="315" key="EnvironmentVariablesDialog/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1606725501817" />
-    <state width="1398" height="371" key="GridCell.Tab.0.bottom" timestamp="1607604045538">
+    <state width="1398" height="371" key="GridCell.Tab.0.bottom" timestamp="1607605132823">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.bottom/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989576" />
     <state width="1007" height="159" key="GridCell.Tab.0.bottom/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351846" />
     <state width="1398" height="142" key="GridCell.Tab.0.bottom/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259100" />
-    <state width="1398" height="371" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1607604045538" />
+    <state width="1398" height="371" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1607605132823" />
     <state width="1398" height="225" key="GridCell.Tab.0.bottom/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613770" />
     <state width="1007" height="159" key="GridCell.Tab.0.bottom/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361368" />
     <state width="1398" height="214" key="GridCell.Tab.0.bottom/0.25.1440.822@0.25.1440.822" timestamp="1607590655888" />
     <state width="978" height="142" key="GridCell.Tab.0.bottom/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969897" />
-    <state width="1398" height="371" key="GridCell.Tab.0.center" timestamp="1607604045536">
+    <state width="1398" height="371" key="GridCell.Tab.0.center" timestamp="1607605132822">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.center/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989574" />
     <state width="1007" height="159" key="GridCell.Tab.0.center/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351844" />
     <state width="1398" height="142" key="GridCell.Tab.0.center/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259098" />
-    <state width="1398" height="371" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1607604045536" />
+    <state width="1398" height="371" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1607605132822" />
     <state width="1398" height="225" key="GridCell.Tab.0.center/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613745" />
     <state width="1007" height="159" key="GridCell.Tab.0.center/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361366" />
     <state width="1398" height="214" key="GridCell.Tab.0.center/0.25.1440.822@0.25.1440.822" timestamp="1607590655886" />
     <state width="978" height="142" key="GridCell.Tab.0.center/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969894" />
-    <state width="1398" height="371" key="GridCell.Tab.0.left" timestamp="1607604045535">
+    <state width="1398" height="371" key="GridCell.Tab.0.left" timestamp="1607605132821">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.left/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989572" />
     <state width="1007" height="159" key="GridCell.Tab.0.left/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351843" />
     <state width="1398" height="142" key="GridCell.Tab.0.left/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259096" />
-    <state width="1398" height="371" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1607604045535" />
+    <state width="1398" height="371" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1607605132821" />
     <state width="1398" height="225" key="GridCell.Tab.0.left/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613741" />
     <state width="1007" height="159" key="GridCell.Tab.0.left/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361364" />
     <state width="1398" height="214" key="GridCell.Tab.0.left/0.25.1440.822@0.25.1440.822" timestamp="1607590655884" />
     <state width="978" height="142" key="GridCell.Tab.0.left/0.25.1440.875/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607340969893" />
-    <state width="1398" height="371" key="GridCell.Tab.0.right" timestamp="1607604045537">
+    <state width="1398" height="371" key="GridCell.Tab.0.right" timestamp="1607605132823">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="225" key="GridCell.Tab.0.right/0.0.1440.900/-223.-1055.1920.1055@0.0.1440.900" timestamp="1606889989575" />
     <state width="1007" height="159" key="GridCell.Tab.0.right/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419351845" />
     <state width="1398" height="142" key="GridCell.Tab.0.right/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1607316259099" />
-    <state width="1398" height="371" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1607604045537" />
+    <state width="1398" height="371" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1607605132823" />
     <state width="1398" height="225" key="GridCell.Tab.0.right/0.25.1440.822/-223.-1055.1920.1055@0.25.1440.822" timestamp="1606893613756" />
     <state width="1007" height="159" key="GridCell.Tab.0.right/0.25.1440.822/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607419361367" />
     <state width="1398" height="214" key="GridCell.Tab.0.right/0.25.1440.822@0.25.1440.822" timestamp="1607590655887" />
@@ -272,10 +288,10 @@
     </state>
     <state x="82" y="-977" key="SettingsEditor/0.0.1440.900/-223.-1080.1920.1080@-223.-1080.1920.1080" timestamp="1607334997506" />
     <state x="229" y="86" key="SettingsEditor/0.0.1440.900/-223.-1080.1920.1080@0.0.1440.900" timestamp="1606726984608" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1607602969935">
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1607604267087">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1607602969935" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1607604267087" />
     <state x="445" y="-734" key="com.goide.refactor.extractInterface.GoExtractInterfaceDialog" timestamp="1607403570710">
       <screen x="-223" y="-1080" width="1920" height="1080" />
     </state>

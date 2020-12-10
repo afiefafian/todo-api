@@ -2,9 +2,9 @@ package http
 
 import (
 	"encoding/json"
+	"github.com/afiefafian/todo-api/src/delivery/http/response"
+	"github.com/afiefafian/todo-api/src/entity"
 	"net/http"
-	"todo_api/src/delivery/http/response"
-	"todo_api/src/entity"
 
 	"github.com/julienschmidt/httprouter"
 )

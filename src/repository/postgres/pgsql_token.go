@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-pg/pg/v10"
 
-	"todo_api/src/entity"
+	"github.com/afiefafian/todo-api/src/entity"
 )
 
 type pgsqlTokenRepository struct {

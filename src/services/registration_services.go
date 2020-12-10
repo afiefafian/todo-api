@@ -5,10 +5,10 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
+	"github.com/afiefafian/todo-api/src/entity"
 	"log"
 	"strings"
 	"time"
-	"todo_api/src/entity"
 )
 
 type registrationServices struct {
@@ -31,10 +31,6 @@ func NewRegistrationServices(u entity.UserRepository, r entity.RegistrationRepos
 var cacheKey = map[string]string{
 	"cooldown": "cooldown",
 	"retry":    "retry",
-}
-
-var errMessages = map[string]string{
-	"failedVerify": "Already failed 10 times, please wait for 10 minutes",
 }
 
 // Register user data to temporary and send register otp to user
@@ -333,11 +329,17 @@ func (r *registrationServices) setOrDecrementFailedVerifyRetry(ctx context.Conte
 	failedRetryKey := fmt.Sprintf("%s:failedretry", key)
 	failedRetry := r.cache.Get(ctx, failedRetryKey)
 	if failedRetry.Val() == "" {
-		r.cache.SetWithTTL(ctx, &entity.Cache{Key: failedRetryKey, Value: "9", TTL: 60 * 2})
+		err := r.cache.SetWithTTL(ctx, &entity.Cache{Key: failedRetryKey, Value: "9", TTL: 60 * 2})
+		if err != nil {
+			return nil
+		}
 		return nil
 	}
 	fmt.Println(failedRetry)
-	r.cache.Decrement(ctx, failedRetryKey)
+	err := r.cache.Decrement(ctx, failedRetryKey)
+	if err != nil {
+		return err
+	}
 	if failedRetry.Val() == "0" {
 		return errors.New("Already failed 10 times, please wait for 10 minutes")
 	}
@@ -348,7 +350,10 @@ func (r *registrationServices) setOrDecrementFailedVerifyRetry(ctx context.Conte
 // setFailedVerifyRetryTimedown set failed code
 func (r *registrationServices) setFailedVerifyRetryTimedown(ctx context.Context, key string) {
 	failedRetryTimedownKey := fmt.Sprintf("%s:failedretrytimedown", key)
-	r.cache.SetWithTTL(ctx, &entity.Cache{Key: failedRetryTimedownKey, Value: key, TTL: 60 * 10})
+	err := r.cache.SetWithTTL(ctx, &entity.Cache{Key: failedRetryTimedownKey, Value: key, TTL: 60 * 10})
+	if err != nil {
+		log.Println("Failed verify retry timedown ", err)
+	}
 	return
 }
 
@@ -356,7 +361,6 @@ func (r *registrationServices) setFailedVerifyRetryTimedown(ctx context.Context,
 func (r *registrationServices) registerStatus(ctx context.Context, key string) error {
 	failedRetryTimedownKey := fmt.Sprintf("%s:failedretrytimedown", key)
 	status := r.cache.Get(ctx, failedRetryTimedownKey)
-
 	if status.Val() != "" {
 		return errors.New("Already failed 10 times, please wait for 10 minutes")
 	}

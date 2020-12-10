@@ -1,12 +1,12 @@
 package http
 
 import (
+	"github.com/afiefafian/todo-api/src/delivery/http/middleware"
+	"github.com/afiefafian/todo-api/src/delivery/http/response"
+	pgsqlRepo "github.com/afiefafian/todo-api/src/repository/postgres"
+	redisRepo "github.com/afiefafian/todo-api/src/repository/redis"
+	"github.com/afiefafian/todo-api/src/services"
 	"net/http"
-	"todo_api/src/delivery/http/middleware"
-	"todo_api/src/delivery/http/response"
-	pgsqlRepo "todo_api/src/repository/postgres"
-	redisRepo "todo_api/src/repository/redis"
-	"todo_api/src/services"
 
 	"github.com/go-redis/redis/v8"
 

@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/afiefafian/todo-api/src/entity"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 	"strings"
 	"time"
-	"todo_api/src/entity"
 )
 
 type userAuthServices struct {

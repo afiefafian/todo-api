@@ -3,9 +3,9 @@ package redis
 import (
 	"context"
 	"fmt"
+	"github.com/afiefafian/todo-api/src/entity"
 	"github.com/go-redis/redis/v8"
 	"time"
-	"todo_api/src/entity"
 )
 
 type redisRegistrationRepository struct {
